@@ -1,15 +1,22 @@
+# Librerias
 library(tidyverse)
 library(mxmaps)
 library(ggtext)
 library(ggrepel)
+#library(showtext)
 
+#font_add_google(family = "roboto", "Roboto")
 
-df_00 <- read_csv("20220411_1600_COMPUTOS_RM2022.csv", 
+#showtext_auto()
+
+## Adquisición de datos
+df_00 <- read_csv("20220411_1845_COMPUTOS_RM2022.csv", 
                   col_names = FALSE,
                   skip = 5)
 
 glimpse(df_00)
 
+## Limpieza de datos
 nombres_columnas <- df_00 %>% filter(row_number() == 1)
 
 df_01 <- df_00 %>% 
@@ -32,7 +39,6 @@ df_01 <- df_00 %>%
          "total_voto" = X16,
          "lista_nominal" = X17) 
   
-
 glimpse(df_01)
 
 
@@ -86,10 +92,10 @@ estados <- estados %>%
          ENTIDAD_RES,
          estado = ENTIDAD_FEDERATIVA)
 
+# Integración de dataframes
 df_02 <- df_01 %>% 
   left_join(estados, by = c("id_entidad" = "ENTIDAD_RES")) %>%
   relocate(estado, .after = entidad)
-
 
 # Reemplazo de NAs por 0
 df_03 <- df_02 %>% 
@@ -145,14 +151,15 @@ participa_por_estado %>%
 mxstate_choropleth(mapa_pct_participa,
                    num_colors = 1) +
   theme(text = element_text(family = "Optima"),
+        plot.title = element_text(size = 18),
         plot.title.position = "plot",
         plot.caption.position = "plot",
         plot.caption = element_markdown(color = "darkgrey",
                                         hjust = 0),
         legend.position = "right") +
-  labs(title = "Proporción de Participación por Entidad Federativa",
-       subtitle = "",
-       caption = "Fuente: Datos del INE 'computosrm2020' <br>
+  labs(title = "Proporción de Participación por Estado",
+       subtitle = "Los números y el gradiente de color indican la proporción\nde personas en la lista nominal que acudieron a votar",
+       caption = "Fuente: Datos del INE 'computosrm2022' <br>
        Visualización: Juan L. Bretón, PMP | @BretonPmp") #-> rm_01
 
 ggsave(filename = "rev_01", plot = rm_01, device = "tiff")
@@ -169,12 +176,12 @@ pct_por_estado <- df_03 %>%
   ungroup()
 
 pct_por_estado %>% 
-  slice_max(order_by = pct_siga, n = 5, with_ties = FALSE) %>% 
+  slice_max(order_by = pct_siga, n = 8, with_ties = FALSE) %>% 
   knitr::kable(digits = 3, 
                format.args = list(big.mark = ","))
 
 pct_por_estado %>% 
-  slice_min(order_by = pct_siga, n = 5, with_ties = FALSE) %>% 
+  slice_min(order_by = pct_siga, n = 8, with_ties = FALSE) %>% 
   knitr::kable(digits = 3, 
                format.args = list(big.mark = ","))
 
@@ -187,14 +194,15 @@ mapa_pct_quesiga <- pct_por_estado %>%
 mxstate_choropleth(mapa_pct_quesiga,
                    num_colors = 1) +
   theme(text = element_text(family = "Optima"),
+        plot.title = element_text(size = 18),
         plot.title.position = "plot",
         plot.caption.position = "plot",
         plot.caption = element_markdown(color = "darkgrey",
                                         hjust = 0),
         legend.position = "right") +
-  labs(title = "Voto por la Continuidad del Sexenio",
-       subtitle = "Proporción de electores que eligieron 'Que siga'",
-       caption = "Fuente: Datos del INE 'computosrm2020' <br>
+  labs(title = "Voto por la Continuidad del Mandato",
+       subtitle = "Los números y el gradiente de color muestran\nla proporción de electores que eligieron 'Que siga[..]'",
+       caption = "Fuente: Datos del INE 'computosrm2022' <br>
        Visualización: Juan L. Bretón, PMP | @BretonPmp") #-> rm_02
 
 ggsave(filename = "rev_02", plot = rm_02, device = "tiff")
@@ -246,6 +254,7 @@ rela <- df_03 %>%
             size = 2.5) +
    theme(text = element_text(family = "Optima"),
          panel.background = element_rect(fill = "#F7f7f7"),
+         plot.title = element_text(size = 18),
          plot.title.position = "plot",
          plot.caption.position = "plot",
          plot.caption = element_markdown(color = "darkgrey",
@@ -255,9 +264,9 @@ rela <- df_03 %>%
         subtitle = "El tamaño del punto indica la participación ciudadana en el ejercicio",
         x = "Índice de Rezago Social",
         y = "Proporción por la Continuación del Mandato",
-        caption = "Fuente: Datos del INE 'computosrm2020' y CONEVAL (2020) <br>
+        caption = "Fuente: Datos del INE 'computosrm2022' y CONEVAL (2020) <br>
        Visualización: Juan L. Bretón, PMP | @BretonPmp") +
-   xlim(-1.5, 3) -> rm_03
+   xlim(-1.5, 3) #-> rm_03
  
  ggsave(filename = "rev_03", plot = rm_03, device = "tiff")
 
