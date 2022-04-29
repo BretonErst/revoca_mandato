@@ -1,13 +1,16 @@
+###############################################
+##                                           ##
+##            JUAN L. BRETON, PMP            ##
+##                                           ##
+###############################################
+
+
 # Librerias
 library(tidyverse)
 library(mxmaps)
 library(ggtext)
 library(ggrepel)
-#library(showtext)
 
-#font_add_google(family = "roboto", "Roboto")
-
-#showtext_auto()
 
 ## Adquisición de datos
 df_00 <- read_csv("20220411_1845_COMPUTOS_RM2022.csv", 
@@ -150,8 +153,8 @@ participa_por_estado %>%
 # mapa
 mxstate_choropleth(mapa_pct_participa,
                    num_colors = 1) +
-  theme(text = element_text(family = "Optima"),
-        plot.title = element_text(size = 18),
+  theme(text = element_text(family = "Encode Sans Condensed"),
+        plot.title = element_text(size = 16),
         plot.title.position = "plot",
         plot.caption.position = "plot",
         plot.caption = element_markdown(color = "darkgrey",
