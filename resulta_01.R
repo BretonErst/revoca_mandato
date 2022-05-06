@@ -196,7 +196,7 @@ mapa_pct_quesiga <- pct_por_estado %>%
 # mapa
 mxstate_choropleth(mapa_pct_quesiga,
                    num_colors = 1) +
-  theme(text = element_text(family = "Optima"),
+  theme(text = element_text(family = "Encode Sans Condensed"),
         plot.title = element_text(size = 18),
         plot.title.position = "plot",
         plot.caption.position = "plot",
@@ -255,7 +255,7 @@ rela <- df_03 %>%
             hjust = 0.85,
             vjust = 0.95,
             size = 2.5) +
-   theme(text = element_text(family = "Optima"),
+   theme(text = element_text(family = "Encode Sans Condensed"),
          panel.background = element_rect(fill = "#F7f7f7"),
          plot.title = element_text(size = 18),
          plot.title.position = "plot",
